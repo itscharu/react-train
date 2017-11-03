@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+        <title> React Intro</title>
+        <script src="react.production.min.js"></script>
+        <script src="react-dom.production.min.js"></script>
+        <script src="babel.min.js"></script>
+        <script type="text/babel">
+        	class MathCalculator extends React.Component{
+        		state ={
+        			result : ''
+        		}
+        		constructor(){
+        			super()
+        			this.onAddGreetClick = this.onAddGreetClick.bind(this);
+        			this.onSubGreetClick = this.onSubGreetClick.bind(this);
+        			this.onMultGreetClick = this.onMultGreetClick.bind(this);
+        			this.onDivGreetClick = this.onDivGreetClick.bind(this);
+        		}
+                onAddGreetClick(){
+                	let x = parseInt(this.refs.txtX.value,10);
+                    let y = parseInt(this.refs.txtY.value,10);
+                	this.setState({result: x + y})
+                }
+
+                onSubGreetClick(){
+                	
+                	let x = parseInt(this.refs.txtX.value);
+                    let y = parseInt(this.refs.txtY.value);
+                	this.setState({result: x - y})
+                }
+
+                onMultGreetClick(){
+                	
+                	let x = parseInt(this.refs.txtX.value);
+                    let y = parseInt(this.refs.txtY.value);
+                	this.setState({result: x * y})
+                }
+
+                onDivGreetClick(){
+                	
+                	let x = parseInt(this.refs.txtX.value);
+                    let y = parseInt(this.refs.txtY.value);
+                	this.setState({result: x / y})
+                }
+
+        		render(){
+
+                   
+                   return (
+                   	<div>
+                   	    <input type="number" ref="txtX" />
+                   	    <input type="number" ref="txtY" />
+                   	    <input type="button" value="Add" id="addBtn" onClick={this.onAddGreetClick}/>
+                   	    <input type="button" value="Subtract" id="subBtn" onClick={this.onSubGreetClick}/>
+                   	    <input type="button" value="Multiply" id="mulBtn" onClick={this.onMultGreetClick}/>
+                   	    <input type="button" value="Divide" id="divBtn" onClick={this.onDivGreetClick}/>
+                   	    <div> {this.state.result} </div>
+                   	</div>)
+        		}
+        	}
+
+        	
+            ReactDOM.render(<MathCalculator/>,document.getElementById("root"));
+        </script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
