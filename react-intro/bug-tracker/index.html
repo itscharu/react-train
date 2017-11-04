@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bug Tracker</title>
+	<style>
+		body{
+			margin-left: 50px;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		.closed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		.bugname, .stats{
+			font-size: 22pt;
+		}
+		.bugname{
+			cursor : pointer;
+		}
+		ol{
+			width: 500px;
+			list-style: none;
+			-webkit-padding-start : 0px;
+			-moz-padding-start : 0px;
+		}
+		li{
+			margin-bottom: 10px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid gray;
+			background-color: #e7e7e7;
+		}
+		.datetime{
+			font-style: italic;
+		}
+	</style>
+	<script type="text/usecases">
+		1. Add a new bug
+		2. List the bugs
+		3. Toggle the 'closed' status of a bug
+		4. Remove closed bugs
+		5. Display stats
+		6. Sort the bugs
+		7. Persist the bugs in the server
+    </script>
+    <script src="../react.development.js"></script>
+    <script src="../react-dom.development.js"></script>
+    <script src="../babel.min.js"></script>
+    <script type="text/babel">
+
+    class Bug{
+        constructor(){
+            this.status="open";
+            this.detail="";
+            this.time=null;
+        }
+        toggle(){
+            if(this.status=="open"){
+                this.status="closed"
+            }else{
+                this.status="open"
+            }
+        }
+    }
+
+    class EventEmitter{
+                constructor(){
+                   this.__subcriptions=[];
+                }
+                subscribe(fn){
+                    console.log("subscribed")
+                    this.__subcriptions.push(fn);
+                }
+                trigger(){
+                    console.log(this.__subcriptions);
+                    this.__subcriptions.forEach(fn => fn());
+                }
+            } 
+
+    class Bugs extends EventEmitter{
+       
+        constructor(){
+            super();
+            this.bugDetail="";
+            this.bugList = [];
+            this.total=0;
+            this.closed=0;
+        }
+
+        getClosed(){
+            return this.bugList.filter((bug)=> (bug.status==='closed')).length;
+        }
+
+        getTotal(){
+            return this.bugList.length;
+        }
+
+        addBug(bugName){
+           let tm = Date();
+           let bug= new Bug();
+           bug.status="open";
+           bug.detail=bugName;
+           bug.time=tm;
+           this.bugList.push(bug);           
+           this.trigger();
+        }       
+        
+    }
+
+    let BugStats = ({bugsClosed, totBugs}) => (
+        <section className="stats">
+            <span className="closed"> {bugsClosed} </span>
+            <span > / </span>
+            <span>{totBugs}</span>
+        </section>
+    )
+
+    class BugItem extends React.Component{
+        itemClick(){
+            let {bug,method} = this.props;
+            bug.toggle();
+            this.props.onToggle();
+        }
+        render(){
+            let {bug,method} = this.props;
+            let cname = "bugname" + (bug.status==='closed'?" closed":" open");
+            //onClick={()=>{bugs.toggle(index)}}
+            return( <li onClick={this.itemClick.bind(this)}>
+                    <span className={cname}>{bug.detail}</span>
+                    <div className="dateTime">{bug.time}</div>
+                </li>)
+        }
+    }
+
+    class BugEdit extends React.Component{
+        onAddNewClick(){
+            let bugName = this.refs.txtBugName.value;
+            console.log(bugName);
+            this.props.onNewBug(bugName);
+        }
+        render(){
+            console.log("bug edit render")
+            return (
+                    <section className="edit">
+                        <label htmlFor="">Bug Name :</label>
+                        <input type="text" name="" ref="txtBugName"/>
+                        <input type="button" value="Create New" onClick={this.onAddNewClick.bind(this)}/>
+                    </section>
+                );
+            
+        }
+    }
+    
+
+    
+     
+     class Tracker extends React.Component{
+         constructor(){
+             super();
+             this.newBugAdded = this.newBugAdded.bind(this);
+             this.refresh=this.refresh.bind(this);
+         }
+         newBugAdded(bugName){
+             this.props.bugs.addBug(bugName);
+         }
+         refresh(){
+             this.props.bugs.trigger();
+         }
+         render(){
+            let items = bugs.bugList.map((bug,index)=>(<BugItem bug={bug} onToggle={this.refresh}></BugItem>));
+
+
+            return (
+                
+                <div>
+                    <BugStats bugsClosed={bugs.getClosed()} totBugs={bugs.getTotal()}></BugStats>
+                    <section className="sort">
+                        <label htmlFor=""> Order By: </label>
+                        <select name="" id="">
+                            <option value=""></option>
+                            <option value=""></option>
+                        </select>
+                        <label htmlFor="">Descending ? :</label>
+                        <input type="checkbox" name="" id=""/>
+                    </section>
+                    <BugEdit onNewBug={this.newBugAdded}></BugEdit>
+                    <section className="list">
+                        <ol>
+                            {items}
+                        </ol>
+                        <input type="button" value="Remove Closed"/>
+                    </section>
+                </div>
+            )
+         }
+     } 
+
+     let bugs = new Bugs();
+        function renderApp(){
+            ReactDOM.render(<Tracker bugs={bugs}/>, document.getElementById('root'));
+        }
+		bugs.subscribe(renderApp);
+        renderApp();
+    </script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+	<hr>
+	<div id="root">
+</body>
+</html>
