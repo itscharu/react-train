@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+        <title> React Intro</title>
+        <script src="react.production.min.js"></script>
+        <script src="react-dom.production.min.js"></script>
+        <script src="babel.min.js"></script>
+        <script type="text/babel">
+
+            class EventEmitter{
+                constructor(){
+                   this.__subcriptions=[];
+                }
+                subscribe(fn){
+                    console.log("subscribed")
+                    this.__subcriptions.push(fn);
+                }
+                trigger(){
+                    console.log(this.__subcriptions);
+                    this.__subcriptions.forEach(fn => fn());
+                }
+            }
+
+            class MathModel extends EventEmitter{
+                constructor(){
+                    super();
+                    this.x =0;
+                    this.y=0;
+                    this.result =0;
+                }
+
+                add(){
+                    this.result = this.x+this.y;
+                    this.trigger();
+                }
+                sub(){
+                    this.result = this.x-this.y;
+                    this.trigger();
+                }
+                mult(){
+                    this.result = this.x*this.y;
+                    this.trigger();
+                }
+                div(){
+                    this.result = this.x/this.y;
+                    this.trigger();
+                }
+                
+            }
+
+        	let MathCalculator =({model})=> (
+                   	<div>
+                   	    <input type="number"  onChange={(evt)=>{model.x = parseInt(evt.target.value)}}/>
+                   	    <input type="number"  onChange={(evt)=>{model.y = parseInt(evt.target.value)}}/>
+                   	    <input type="button" value="Add" id="addBtn" onClick={()=>model.add()}/>
+                   	    <input type="button" value="Subtract" id="subBtn" onClick={()=>model.sub()}/>
+                   	    <input type="button" value="Multiply" id="mulBtn" onClick={()=>model.mult()}/>
+                   	    <input type="button" value="Divide" id="divBtn" onClick={()=>model.div()}/>
+                   	    <div> {model.result} </div>
+                   	</div>
+            );
+        		
+        	
+            let model=new MathModel();
+        	function renderApp(){
+                ReactDOM.render(<MathCalculator model={model}/>,document.getElementById("root"));
+
+            }
+            model.subscribe(renderApp);
+            renderApp();
+            
+        </script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
