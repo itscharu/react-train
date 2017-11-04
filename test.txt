@@ -1,0 +1,65 @@
+https://github.com/tkmagesh
+
+http://bit.ly/javascript-training-videos
+
+map
+filter
+reduce
+forEach
+
+var list = [1,2,3]
+
+var [f,s,...r]=list
+
+f
+1
+s
+2
+r
+[3]
+[f,s]=[s,f]
+(2) [2, 1]
+f
+2
+s
+1
+function add(x=10,y=20){
+    return x+y;
+}
+undefined
+add(...list)
+3
+var emp ={
+    id : 100,
+    name : 'Magesh',
+    salary : 10000
+}
+undefined
+var {id,name}=emp
+undefined
+id
+100
+name
+"Magesh"
+var add = (x,y) => x+ y;
+undefined
+add(100,200)
+300
+var mul =(x,y) =>{
+    return x*y;
+}
+undefined
+mul(2,3)
+6
+var num = [2,4,1,6,8,3,9]
+undefined
+num.filter(function(x){
+    return x % 2 === 0
+});
+(4) [2, 4, 6, 8]
+num.filter((x) => x % 2 ===0)
+(4) [2, 4, 6, 8]
+
+
+
+es6-features.org

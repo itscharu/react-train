@@ -13,10 +13,10 @@
         		}
         		constructor(){
         			super()
-        			this.onAddGreetClick = this.onAddGreetClick.bind(this);
-        			this.onSubGreetClick = this.onSubGreetClick.bind(this);
-        			this.onMultGreetClick = this.onMultGreetClick.bind(this);
-        			this.onDivGreetClick = this.onDivGreetClick.bind(this);
+        			this.onAddClick = this.onAddClick.bind(this);
+        			this.onSubClick = this.onSubClick.bind(this);
+        			this.onMultClick = this.onMultClick.bind(this);
+        			this.onDivClick = this.onDivClick.bind(this);
         		}
                 onAddGreetClick(){
                 	let x = parseInt(this.refs.txtX.value,10);
@@ -52,10 +52,10 @@
                    	<div>
                    	    <input type="number" ref="txtX" />
                    	    <input type="number" ref="txtY" />
-                   	    <input type="button" value="Add" id="addBtn" onClick={this.onAddGreetClick}/>
-                   	    <input type="button" value="Subtract" id="subBtn" onClick={this.onSubGreetClick}/>
-                   	    <input type="button" value="Multiply" id="mulBtn" onClick={this.onMultGreetClick}/>
-                   	    <input type="button" value="Divide" id="divBtn" onClick={this.onDivGreetClick}/>
+                   	    <input type="button" value="Add" id="addBtn" onClick={this.onAddClick}/>
+                   	    <input type="button" value="Subtract" id="subBtn" onClick={this.onSubClick}/>
+                   	    <input type="button" value="Multiply" id="mulBtn" onClick={this.onMultClick}/>
+                   	    <input type="button" value="Divide" id="divBtn" onClick={this.onDivClick}/>
                    	    <div> {this.state.result} </div>
                    	</div>)
         		}
