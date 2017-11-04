@@ -18,27 +18,27 @@
         			this.onMultClick = this.onMultClick.bind(this);
         			this.onDivClick = this.onDivClick.bind(this);
         		}
-                onAddGreetClick(){
+                onAddClick(){
                 	let x = parseInt(this.refs.txtX.value,10);
                     let y = parseInt(this.refs.txtY.value,10);
                 	this.setState({result: x + y})
                 }
 
-                onSubGreetClick(){
+                onSubClick(){
                 	
                 	let x = parseInt(this.refs.txtX.value);
                     let y = parseInt(this.refs.txtY.value);
                 	this.setState({result: x - y})
                 }
 
-                onMultGreetClick(){
+                onMultClick(){
                 	
                 	let x = parseInt(this.refs.txtX.value);
                     let y = parseInt(this.refs.txtY.value);
                 	this.setState({result: x * y})
                 }
 
-                onDivGreetClick(){
+                onDivClick(){
                 	
                 	let x = parseInt(this.refs.txtX.value);
                     let y = parseInt(this.refs.txtY.value);
