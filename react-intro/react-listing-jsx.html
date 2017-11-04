@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Math Calculator</title>
+	
+	<script src="react.production.min.js"></script>
+    <script src="react-dom.production.min.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        class EventEmitter{
+                constructor(){
+                   this.__subcriptions=[];
+                }
+                subscribe(fn){
+                    console.log("subscribed")
+                    this.__subcriptions.push(fn);
+                }
+                trigger(){
+                    console.log(this.__subcriptions);
+                    this.__subcriptions.forEach(fn => fn());
+                }
+            }
+        class Product extends EventEmitter{
+            constructor(){
+                super();
+                this.item = '';
+                this.__products = ['Pen','Pencil','Sharpener'];
+            }
+            add(){
+                console.log(this.item)
+                this.__products.push(this.item);
+                this.trigger();
+            }
+        }
+		let ProductList = ({product}) => {
+			/*let items = []
+			for(let index = 0; index < products.length; index++){
+				items.push(<li key={index}>{products[index]}</li>)
+			}*/
+			/*
+			let items = [];
+			products.forEach((product, index) => items.push(<li key={index}>{products[index]}</li>));
+			*/
+			let items = product.__products.map((prod, index) => (<li key={index}>{prod}</li>));
+			
+			return (
+                <div>
+                <label> Product Name: </label>
+                <input type="text" onChange={(evt) => {product.item= evt.target.value}} />
+                <input type="button" value="Add" id="addBtn" onClick={()=> product.add()}/>
+				<ol>
+					{items}
+				</ol>
+                </div>
+			)
+		};	
+		let products = new Product();
+        function renderApp(){
+            ReactDOM.render(<ProductList product={products}/>, document.getElementById('content'));
+        }
+		products.subscribe(renderApp);
+        renderApp();
+	</script>
+</head>
+<body>
+
+	<div id="content"></div>
+</body>
+</html>
