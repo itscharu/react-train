@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+        <title> React Intro</title>
+        <style>
+            .result{
+                font-size: 22pt;
+            }
+            .positive{
+                color : green;
+            }
+            .negative{
+                color : red;
+            }
+        </style>
+        <script src="../react.development.js"></script>
+        <script src="../react-dom.development.js"></script>
+        <script src="../babel.min.js"></script>
+        <script src="stateManager.js"></script>
+        <script type="text/babel">
+            function calcReducer(currentState=0 , action){
+              if (action.type === 'ADD'){
+                  currentState=action.payload.x+action.payload.y
+                  
+              }
+                
+              if (action.type === 'SUBTRACT'){
+                 currentState=action.payload.x- action.payload.y
+              }
+              if (action.type === 'MULTIPLY'){
+                 currentState= action.payload.x * action.payload.y
+                 
+              }
+              if (action.type === 'DIVIDE'){
+                 currentState= action.payload.x / action.payload.y
+                 
+              }
+
+              return currentState;
+            }
+
+            let store = SM.createStore(calcReducer);
+            function bindAddAction(dispatch){
+              return function get_add_action(payload){
+                dispatch({ type : 'ADD' ,payload:payload});
+              }
+            }
+            function bindSubtractAction(dispatch){
+              return function get_subtract_action(payload){
+                dispatch({ type : 'SUBTRACT' ,payload:payload});
+              }
+            }
+            function bindMultiplyAction(dispatch){
+              return function get_multiply_action(payload){
+                dispatch({ type : 'MULTIPLY',payload:payload});
+              }
+            }
+            function bindDivideAction(dispatch){
+              return function get_divide_action(payload){
+                dispatch({ type : 'DIVIDE' ,payload:payload});
+              }
+            }
+
+            class MathCalculator extends React.Component{
+                constructor(){
+                    super();
+                    //this.onSubmit=this.onSubmit.bind(this);
+                }
+
+                getSubmitHandler(action){
+                    return (function onSubmit(){
+                        let x = parseInt(this.refs.txtX.value);
+                        let y = parseInt(this.refs.txtY.value);
+                        action({x: x,y:y});
+                    }).bind(this);
+                }
+
+                render(){
+                    let value=this.props.value;
+                   
+                    //console.log(this.props)
+                    return(<div>
+                        <input type="number"  ref="txtX" />
+                        <input type="number"  ref="txtY" />
+                        <input type="button" value="Add"  onClick={this.getSubmitHandler(this.props.addAction)} />     
+                        <input type="button" value="Subtract"  onClick={this.getSubmitHandler(this.props.subAction)} />  
+                        <input type="button" value="Multiply"  onClick={this.getSubmitHandler(this.props.multAction)} />  
+                        <input type="button" value="Divide"  onClick={this.getSubmitHandler(this.props.divAction)} />                    
+                        <div>{value}</div>
+                    </div>)
+                }
+
+            }
+
+
+                         
+            let addAction = bindAddAction(store.dispatch);
+            let subAction = bindSubtractAction(store.dispatch);
+            let multAction = bindMultiplyAction(store.dispatch);
+            let divAction = bindDivideAction(store.dispatch);
+            function renderApp(){
+              let value = store.getState();
+              ReactDOM.render(<MathCalculator 
+                value = {value} 
+                addAction={addAction} 
+                subAction={subAction}
+                multAction={multAction}
+                divAction={divAction}/>, document.getElementById('content'));
+            }
+            store.subscribe(renderApp);
+            renderApp();
+        </script>
+    </head>
+    <body>
+        <div id="content"></div>
+    </body>
+    </html>

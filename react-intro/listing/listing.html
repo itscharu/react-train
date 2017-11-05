@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Product listing</title>
+	
+	<script src="../react.production.min.js"></script>
+    <script src="../react-dom.production.min.js"></script>
+    <script src="../babel.min.js"></script>
+     <script src="stateManager.js"></script>
+    <script type="text/babel">
+
+        function ProdListingReducer(currentState=[],action){
+            if(action.type==='ADD'){
+                return [...currentState,action.payload]
+            }
+            return currentState;
+        }
+
+        let store = SM.createStore(ProdListingReducer);
+
+
+        function bindAddAction(dispatch){
+              return function get_add_action(product){
+                dispatch({ type : 'ADD' ,payload:product});
+              }
+        }
+        
+        class ProductList  extends React.Component {
+
+           submit(){
+               let productToAdd = this.refs.txtProduct.value;
+               let {addProduct} = this.props;
+               addProduct(productToAdd);
+            }
+
+            render(){
+                let {products} = this.props;
+                let items = products.map((prod, index) => (<li key={index}>{prod} </ li> ));
+
+                return (
+                    <div>
+                    <label> Product Name: </label>
+                    <input type="text" ref="txtProduct" />
+                    <input type="button" value="Add" id="addBtn" onClick={this.submit.bind(this)}/>
+                    <ol>
+                        {items}
+                    </ol>
+                    </div>
+                );
+            }
+        }
+
+        let addAction = bindAddAction(store.dispatch);
+        function renderApp(){
+          let products = store.getState();
+          ReactDOM.render(<ProductList 
+            products = {products} 
+            addProduct={addAction} 
+            />, document.getElementById('content'));
+        }
+        store.subscribe(renderApp);
+        renderApp();
+
+		
+	</script>
+</head>
+<body>
+
+	<div id="content"></div>
+</body>
+</html>
